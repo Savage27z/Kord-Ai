@@ -1,0 +1,9 @@
+node_modules
+.git
+.env
+.env.*
+config.env
+session
+sessions
+auth_info*
+*.session

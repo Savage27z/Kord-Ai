@@ -28,7 +28,7 @@ kord({
   const platformInfo = getPlatformInfo()
   if (platformInfo.platform === "render") {
     try {
-      await m.send(`*_Config Successfully Set_* *${key.toUpperCase()}* _to_ *${value}*\n_Restarting..._`)
+      await m.send(`*_Config Successfully Set_* *${key.toUpperCase()}* (value hidden)\n_Restarting..._`)
       await setVar(key.toUpperCase(), value)
     } catch (error) {
       await m.send(`*Error setting variable:* ${error.message}`)
@@ -38,7 +38,7 @@ kord({
     if (isExist) {
       if (!process.env[key]) {
         await updateEnv(key, value)
-        return await m.send(`*Config set successfully!*\n\n_Created ${key} with value ${value}_`)
+        return await m.send(`*Config set successfully!*\n\n_Created ${key} (value hidden)_`)
       } else {
         await updateEnv(key, value)
         return await m.send(`*Config set successfully!*`)
@@ -48,30 +48,6 @@ kord({
       return await m.send(`*Config set successfully!*`)
     }
   }
-  } catch (e) {
-    console.log("cmd error", e)
-    return await m.sendErr(e)
-  }
-})
-
-kord({
-cmd: "getvar",
-  desc: "get all variables from config.js/config.env",
-  fromMe: true,
-  type: "config",
-}, async (m, text) => {
-  try {
-    if (!text) return m.reply("_*provide var name...*_\n_example: getvar SUDO_")
-    const key = text.trim().toUpperCase()
-    if (typeof key !== 'string' || !key.trim()) {
-    await m.reply("_*Invalid variable!...*_")
-    } else if (await envExists()) {
-    return await m.send(`*${key}*: ${process.env[key]}`)
-    } else if (config()[key]) {
-    return await m.send(`*${key}*: ${config()[key]}`)
-    } else {
-    await m.reply(`_*'${key}' not found in config*_`)
-    }
   } catch (e) {
     console.log("cmd error", e)
     return await m.sendErr(e)
@@ -109,55 +85,11 @@ kord({
   }
 })
 
-kord({
-  cmd: "allvar",
-  desc: "get all variables/settings",
-  fromMe: true,
-  type: "config",
-}, async (m, text)=> {
-  try {
-  const platformInfo = getPlatformInfo()
-  
-  if (platformInfo.platform === "render") {
-    try {
-      const result = await getVars()
-      if (result.success) {
-  var data = '*All Vars (Render)*\n\n'
-  for (var item of result.data) {
-    const variable = item.envVar
-    data += `*${variable.key}*: ${variable.value}\n`
-  }
-  return await m.send(data)
-}
-    } catch (error) {
-      await m.send(`*Error getting variables:* ${error.message}`)
-      return
-    }
-  }
-  if (await envExists()) {
-    var h = await listEnvKeys()
-      var daa = '*All Vars*\n\n'
-    for (var hh of h) {
-      daa += `*${hh}*: ${process.env[hh]}\n`
-    }
-    return await m.send(`${daa}`)
-  } else {
-    const data = '*All Vars*\n\n' + Object.keys(config())
-    .map(key => `*${key}:* ${config()[key]}`)
-    .join('\n')
-    return await m.send(`${data}`)
-  }
-  } catch (e) {
-    console.log("cmd error", e)
-    return await m.sendErr(e)
-  }
-})
-
 async function updateAllConfig(key, value, m) {
   const platformInfo = getPlatformInfo()
   if (platformInfo.platform === "render") {
     try {
-      await m.send(`*_${key} set to ${value}_*\n_Restarting..._`)
+      await m.send(`*_${key} updated (value hidden)_*\n_Restarting..._`)
       if (process.env[key]) {
         await setVar(key, value)
       } else {
@@ -171,14 +103,14 @@ async function updateAllConfig(key, value, m) {
     if (isExist) {
       if (!process.env[key]) {
         await updateEnv(key, value)
-        return await m.send(`*_${key} set to ${value}_*`)
+        return await m.send(`*_${key} updated (value hidden)_*`)
       } else {
         await updateEnv(key, value)
-        return await m.send(`*_${key} set to ${value}_*`)
+        return await m.send(`*_${key} updated (value hidden)_*`)
       }
     } else {
       await updateConfig(key, value)
-      return await m.send(`*_${key} set to ${value}_*`)
+      return await m.send(`*_${key} updated (value hidden)_*`)
     }
   }
 }
